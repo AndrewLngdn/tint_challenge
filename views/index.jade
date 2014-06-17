@@ -5,5 +5,10 @@ block content
   p Welcome to #{title}
   #wrapper
     h2 Enter tags to battle
-    input#hashtag1(type='text', placholder='first hashtag')
-    input#hashtag2(type='text', placholder='second hashtag')
+    form(action="/battles/create" method="post")
+      input#hashtag1(type='text', placeholder='first hashtag', name='tag1')
+      input#hashtag2(type='text', placeholder='second hashtag', name='tag2')
+      input(type='submit')
+
+
+    include battles
