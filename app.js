@@ -7,11 +7,8 @@ var bodyParser = require('body-parser');
 
 // mongoose db setup
 require('./db');
-require('./lib/twitter-capture')
-
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
 var battles = require('./routes/battles');
 
 var app = express();
@@ -27,10 +24,7 @@ app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-
 app.use('/', routes);
-app.use('/users', users);
 app.use('/battles', battles);
 
 /// catch 404 and forward to error handler
@@ -64,6 +58,24 @@ app.use(function(err, req, res, next) {
     });
 });
 
+var debug = require('debug')('tint_challenge');
 
-module.exports = app;
-// module.exports.twit = twit;
+app.set('port', process.env.PORT || 3000);
+
+var server = app.listen(app.get('port'), function() {
+  debug('Express server listening on port ' + server.address().port);
+});
+
+// module.exports = server;
+var io = require('socket.io').listen(server);
+
+
+
+var updateEmitter = require('./lib/twitter-capture');
+
+updateEmitter.on('battle_update', function(battle){
+    io.sockets.emit('battle_update', battle);
+});
+
+
+

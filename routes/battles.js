@@ -4,8 +4,6 @@ var mongoose = require('mongoose');
 var Battle = mongoose.model('Battle');
 
 
-
-
 /* GET users listing. */
 router.get('/', function(req, res) {
   Battle.find(function(err, battles, count){
