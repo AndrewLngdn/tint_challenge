@@ -15,16 +15,6 @@ var battles = require('./routes/battles');
 
 var app = express();
 
-var config = require('./config');
-var Twit = require('twit');
-
-var twit = new Twit({
-    consumer_key: config.consumer_key,
-    consumer_secret: config.consumer_secret,
-    access_token: config.access_token,
-    access_token_secret: config.access_token_secret
-});
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -80,4 +70,4 @@ app.use(function(err, req, res, next) {
 
 
 module.exports = app;
-module.exports.twit = twit;
+// module.exports.twit = twit;
