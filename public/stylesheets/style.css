@@ -6,3 +6,47 @@ body {
 a {
   color: #00B7FF;
 }
+
+.tag1 {
+	color: rgb(247, 132, 8);
+	font-size: 2em;
+}
+
+.tag2 {
+	color: rgb(8, 180, 247);
+	font-size: 2em;
+}
+
+div.tag1-count, div.tag2-count {
+	font-size: 1.5em;
+}
+
+
+.tag1-container {
+	float:left;
+}
+
+.tag2-container {
+	float:right;
+	text-align: right;
+}
+
+ul.battle-list{
+	padding: 5px;
+	margin: 0px;
+}
+
+ul li.battle {
+	padding: 5px 15px;
+
+	clear: both;
+	list-style-type: none;
+	border-top: 1px solid grey;
+}
+
+ul li.battle div.date-created{
+	padding-bottom: 10px;
+	padding-top: 10px;
+	clear:both;
+}
+

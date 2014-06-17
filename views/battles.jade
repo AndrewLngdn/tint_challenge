@@ -1,8 +1,21 @@
-each battle in battles
-  li
-    .tag1= battle.tag1
-    .tag1-count= battle.tag1_count
-    .tag2= battle.tag2
-    .tag2-count= battle.tag2_count
-    | date_created
-    .date-created= battle.created_at
+ul.battle-list
+  li.battle
+    h3 Template:
+    .tag1-container
+      .tag1 Brand1
+      .tag1-count Count of tags on twitter
+    .tag2-container
+      .tag2 battle.tag2
+      .tag2-count Count of hashtags on twitter
+    .date-created since this date
+
+  each battle in battles  
+    li.battle
+      .tag1-container
+        .tag1= battle.tag1
+        .tag1-count= battle.tag1_count
+      .tag2-container
+        .tag2= battle.tag2
+        .tag2-count= battle.tag2_count
+      .date-created= battle.created_at
+  
