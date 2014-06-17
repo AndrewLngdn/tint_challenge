@@ -7,7 +7,7 @@ var Battle = mongoose.model('Battle');
 router.get('/', function(req, res) {
   Battle.find(function(err, battles, count){
   	res.render('index', {
-  		battles: battles
+  		battles: battles.reverse()
   	})
   })
 });

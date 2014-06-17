@@ -7,6 +7,10 @@ a {
   color: #00B7FF;
 }
 
+li.example {
+	opacity: 0.5;
+}
+
 .tag1 {
 	color: rgb(247, 132, 8);
 	font-size: 2em;
@@ -19,14 +23,15 @@ a {
 
 div.tag1-count, div.tag2-count {
 	font-size: 1.5em;
+	padding-top: 5px;
 }
 
 
-.tag1-container {
+div.tag1-container {
 	float:left;
 }
 
-.tag2-container {
+div.tag2-container {
 	float:right;
 	text-align: right;
 }
