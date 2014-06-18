@@ -75,5 +75,6 @@ updateEmitter.on('battle_update', function(battle){
     io.sockets.emit('battle_update', battle);
 });
 
+// updateEmitter.emit('update_tags');
 
 
