@@ -1,5 +1,3 @@
-var battlesObject = {};
-
 $(document).ready(function(){
 
 	// get our battle list from the server
@@ -16,17 +14,10 @@ function populateBattleList(){
 
 	$.get('/battles', function(battles){
 
-		battles.forEach(function(battle){
-			battlesObject[battle._id] = battle;
-		})
-		addBattlesToPage();
+		$.each(battles, function(id, battle){
+			$('.battle-list').append(battleTemplate(battle));
+		})	
 	})
-}
-
-function addBattlesToPage(){
-	$.each(battlesObject, function(id, battle){
-		$('.battle-list').append(battleTemplate(battle));
-	})	
 }
 
 // functions for live updating
@@ -34,14 +25,14 @@ function initializeSocketIOServer(){
 	var server = io.connect('http://localhost:3000');
 
 	server.on('battle_update', function(battle){
-		battlesObject[battle._id] = battle;
-		updateBattleList(battle);
+		updateBattleCount(battle);
 	});
 }
 
-function updateBattleList(battle){
-	var $battle = $('#' + battle._id)
-	$battle.replaceWith(battleTemplate(battle));
+function updateBattleCount(battle){
+	var $battle = $('#' + battle._id);
+	$battle.find('.tag1-count').text(battle.tag1_count);
+	$battle.find('.tag2-count').text(battle.tag2_count);
 }
 
 
@@ -55,7 +46,6 @@ function deleteBattle(event){
 	}).done(function(){
 		$('#' + battle_id).remove();
 	});
-
 }
 
 
