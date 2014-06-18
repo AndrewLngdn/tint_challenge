@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var Battle = mongoose.model('Battle');
+var updateEmitter = require('../lib/twitter-capture');
 
 
 /* GET users listing. */
@@ -25,13 +26,17 @@ router.post('/create', function(req, res){
 		created_at: curr_year + "-" + curr_month + "-" + curr_date
 	}).save(function(err, battle, count){
 		res.redirect('/');
-	})
+		updateEmitter.emit('update_tags');
+	});
+
+
 });
 
 router.delete('/delete/:id', function(req, res){
 	var battle_id = req.params.id;
 	console.log('got delete with id ' + battle_id);
 	Battle.findById(battle_id, function(err, battle){
+		// console.log("error: " + err);
 		battle.remove();
 	});
 });

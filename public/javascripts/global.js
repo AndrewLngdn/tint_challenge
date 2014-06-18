@@ -10,15 +10,13 @@ $(document).ready(function(){
 		addBattlesToPage();
 	})
 
-
-
 	var server = io.connect('http://localhost:3000');
 
 	server.on('battle_update', function(battle){
-		// console.log('getting update');
 		battlesObject[battle._id] = battle;
 		updateBattleList(battle);
-	})
+	});
+	
 	$(document).on('click', 'div.delete-text', deleteBattle);
 });
 
@@ -27,7 +25,6 @@ function deleteBattle(event){
 	$.ajax({
 		type: 'DELETE',
 		url: '/battles/delete/' + battle_id
-		// url: '/battles/delete'
 	});
 
 }
