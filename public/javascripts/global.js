@@ -15,6 +15,30 @@ function populateBattleList(){
 	$.get('/battles', function(battles){
 		$.each(battles, function(id, battle){
 			$('.battle-list').append(battleTemplate(battle));
+				var $battle = $('#' + battle._id);
+				var left_count = battle.tag1_count;
+				var right_count = battle.tag2_count;
+				var left_size = 300*(left_count/(left_count+right_count));
+				var right_size = 300-left_size;
+				var canvas = $battle.find('canvas').get(0);
+				if (canvas.getContext) {
+					var ctx = canvas.getContext('2d');
+
+					if (left_count === 0 && right_count === 0){
+						ctx.fillStyle = "grey";
+						ctx.fillRect(0,0, 300, 300);
+	
+					} else {
+						ctx.fillStyle = "rgb(247, 132, 8)";
+						ctx.fillRect(0,0, left_size, 300);
+						ctx.fillStyle = "rgb(8, 180, 247)";
+						ctx.fillRect(left_size,0, 300, 300);
+	
+					}
+					
+				}	
+				$battle.find('.tag1-count').text(battle.tag1_count);
+				$battle.find('.tag2-count').text(battle.tag2_count);
 		})	
 	})
 }
@@ -38,9 +62,9 @@ function updateBattleCount(battle){
 	if (canvas.getContext) {
 		var ctx = canvas.getContext('2d');
 		ctx.fillStyle = "rgb(247, 132, 8)";
-		ctx.fillRect(0,0, left_size, 100);
+		ctx.fillRect(0,0, left_size, 300);
 		ctx.fillStyle = "rgb(8, 180, 247)";
-		ctx.fillRect(left_size,0, 300, 100);
+		ctx.fillRect(left_size,0, 300, 300);
 
 	}	
 	$battle.find('.tag1-count').text(battle.tag1_count);
@@ -65,17 +89,19 @@ function deleteBattle(event){
 function battleTemplate(battle){
 	var battleHTML = "";
 	battleHTML += "<li class='battle' id='" + battle._id + "'>";
-	battleHTML += "    <div class='tag1-container'>";
-	battleHTML += "        <div class='tag1'>" + battle.tag1 + "</div>";
-	battleHTML += "        <div class='tag1-count'>" + battle.tag1_count + "</div>";
-	battleHTML += "    </div>";
-	battleHTML += "    <div class='tag2-container'>";
-	battleHTML += "        <div class='tag2'>" + battle.tag2 + "</div>";
-	battleHTML += "        <div class='tag2-count'>" + battle.tag2_count + "</div>";
-	battleHTML += "    </div>";
-	battleHTML += "    <div class='date-created'>";
-	battleHTML += "        created on " + battle.created_at;
-	battleHTML += "        <div class='delete-text'>delete</div>"
+	battleHTML += "     <div class='battle-text'>";
+	battleHTML += "         <div class='tag1-container'>";
+	battleHTML += "             <div class='tag1'>" + battle.tag1 + "</div>";
+	battleHTML += "             <div class='tag1-count'>" + battle.tag1_count + "</div>";
+	battleHTML += "         </div>";
+	battleHTML += "         <div class='tag2-container'>";
+	battleHTML += "             <div class='tag2'>" + battle.tag2 + "</div>";
+	battleHTML += "             <div class='tag2-count'>" + battle.tag2_count + "</div>";
+	battleHTML += "         </div>";
+	battleHTML += "         <div class='date-created'>";
+	battleHTML += "             " + battle.created_at;
+	battleHTML += "             <div class='delete-text'>delete</div>"
+	battleHTML += "         </div>";
 	battleHTML += "    </div>";
 	battleHTML += "    <canvas class='ratio' id='canvas-" + battle._id + "'></canvas>"
 	battleHTML += "</div>";

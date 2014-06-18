@@ -2,14 +2,14 @@ body {
   padding: 50px;
   padding-top: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: #F7F7F7;
 }
 
 canvas.ratio {
 	width: 100%;
-	height: 10px;
-	position:absolute;
-	bottom: 0;
-	clear: both;
+	height: 15px;
+	top: 0;
+	margin-bottom: -5px;
 }
 
 a {
@@ -24,7 +24,7 @@ input:focus {
 	height: 100%;
 }
 
-li.example {
+ul li.example {
 	opacity: 0.5;
 }
 
@@ -71,8 +71,13 @@ ul.battle-list{
 	margin: 0px;
 }
 
+ul li.battle div.battle-text  {
+	padding: 10px 15px;
+
+}
+
 ul li.battle {
-	padding: 5px 15px;
+	/*padding: 5px 15px;*/
 	padding-bottom: 0px;
 	background-color: white;
 	clear: both;
@@ -128,6 +133,14 @@ input#hashtag2 {
 
 ::-webkit-input-placeholder {
    text-align: center;
+}
+
+#hashtag1::-webkit-input-placeholder {
+	color: rgb(247, 132, 8);
+}
+
+#hashtag2::-webkit-input-placeholder {
+	color: rgb(8, 180, 247);
 }
 
 :-moz-placeholder { /* Firefox 18- */

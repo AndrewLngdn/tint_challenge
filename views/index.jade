@@ -2,12 +2,10 @@ extends layout
 
 block content
   #wrapper
-    //.title-container
-      //h1 enter tags to battle
     .form-container
       form(action="/battles/create" method="post")
-        input#hashtag1(type='text', placeholder='first hashtag', name='tag1')
-        input#hashtag2(type='text', placeholder='second hashtag', name='tag2')
+        input#hashtag1(type='text', placeholder='enter first hashtag', name='tag1')
+        input#hashtag2(type='text', placeholder='enter second hashtag', name='tag2')
         input.hidden-submit(type='submit')
   
  
