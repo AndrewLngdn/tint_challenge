@@ -5,7 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-// mongoose db setup
+// sets up our battle model and connects to mongo
 require('./db');
 
 var routes = require('./routes/index');
@@ -66,9 +66,13 @@ var server = app.listen(app.get('port'), function() {
   debug('Express server listening on port ' + server.address().port);
 });
 
-// module.exports = server;
+// socket.io is used to push the battle data 
+// to the browser
+
 var io = require('socket.io').listen(server);
 
+// when a battle gets a new count,
+// tell all the clients so they can update
 var updateEmitter = require('./lib/twitter-capture');
 
 updateEmitter.on('battle_update', function(battle){

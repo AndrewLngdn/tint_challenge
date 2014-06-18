@@ -12,6 +12,8 @@ router.get('/', function(req, res) {
   })
 });
 
+// creates new battles. Happens when a user
+// inputs two tags on the index page
 router.post('/create', function(req, res){
  	var d = new Date();
     var curr_date = d.getDate(); // -1 for testing
@@ -26,7 +28,8 @@ router.post('/create', function(req, res){
 		created_at: curr_year + "-" + curr_month + "-" + curr_date
 	}).save(function(err, battle, count){
 		res.redirect('/');
-		// everytime a new battle is added we update our tags
+		// everytime a new battle is added, update the tags on
+		// our twitter stream
 		updateEmitter.emit('update_tags');
 	});
 
@@ -35,13 +38,11 @@ router.post('/create', function(req, res){
 
 router.delete('/delete/:id', function(req, res){
 	var battle_id = req.params.id;
-	// console.log('got delete with id ' + battle_id);
 	Battle.findById(battle_id, function(err, battle){
-		// console.log("error: " + err);
-		battle.remove();
 		if (err !== undefined){
 			res.send(err);	
 		} else {
+			battle.remove();
 			res.send('');
 		}
 	});

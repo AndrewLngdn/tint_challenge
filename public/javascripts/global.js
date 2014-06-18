@@ -1,5 +1,4 @@
 $(document).ready(function(){
-
 	// get our battle list from the server
 	populateBattleList();
 	initializeSocketIOServer();
@@ -20,6 +19,9 @@ function populateBattleList(){
 			$battle.find('.tag1-count').text(battle.tag1_count);
 			$battle.find('.tag2-count').text(battle.tag2_count);
 
+			if (battle === undefined){
+				console.log('battle is undefined in populate list');
+			}
 			updateRatioBar(battle);
 		})	
 	})
@@ -54,6 +56,9 @@ function initializeSocketIOServer(){
 	var server = io.connect('http://localhost:3000');
 
 	server.on('battle_update', function(battle){
+		if (battle === undefined){
+			console.log('battle is undefined in server update');
+		}
 		updateBattleCount(battle);
 	});
 }
