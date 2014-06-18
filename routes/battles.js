@@ -7,9 +7,10 @@ var Battle = mongoose.model('Battle');
 /* GET users listing. */
 router.get('/', function(req, res) {
   Battle.find(function(err, battles, count){
-  	res.render('index', {
-  		battles: battles.reverse()
-  	});
+  	// res.render('index', {
+  	// 	battles: battles.reverse()
+  	// });
+  res.send(battles.reverse());
   })
 });
 
@@ -27,7 +28,7 @@ router.post('/create', function(req, res){
 	}).save(function(err, battle, count){
 		console.log("error: " + err);
 		console.log("battle: " + battle);
-		res.redirect('/battles');
+		res.redirect('/');
 	})
 });
 

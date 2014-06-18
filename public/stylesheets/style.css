@@ -11,6 +11,11 @@ li.example {
 	opacity: 0.5;
 }
 
+#wrapper {
+	margin: auto;
+	width: 75%;
+}
+
 .tag1 {
 	color: rgb(247, 132, 8);
 	font-size: 2em;
@@ -25,7 +30,6 @@ div.tag1-count, div.tag2-count {
 	font-size: 1.5em;
 	padding-top: 5px;
 }
-
 
 div.tag1-container {
 	float:left;
@@ -43,7 +47,7 @@ ul.battle-list{
 
 ul li.battle {
 	padding: 5px 15px;
-
+	background-color: white;
 	clear: both;
 	list-style-type: none;
 	border-top: 1px solid grey;
