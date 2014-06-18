@@ -4,6 +4,14 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
+canvas.ratio {
+	width: 100%;
+	height: 10px;
+	position:absolute;
+	bottom: 0;
+	clear: both;
+}
+
 a {
   color: #00B7FF;
 }
@@ -65,12 +73,14 @@ ul.battle-list{
 
 ul li.battle {
 	padding: 5px 15px;
+	padding-bottom: 0px;
 	background-color: white;
 	clear: both;
 	list-style-type: none;
 	border-top: 1px solid grey;
 	border-left: 1px solid grey;
 	border-right: 1px solid grey;
+	position: relative;
 }
 
 ul li.battle:last-child {
