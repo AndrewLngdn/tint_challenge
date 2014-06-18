@@ -8,6 +8,14 @@ a {
   color: #00B7FF;
 }
 
+input:focus {
+	outline: none; 
+}
+
+#inner-editor{
+	height: 100%;
+}
+
 li.example {
 	opacity: 0.5;
 }
@@ -63,6 +71,11 @@ ul li.battle {
 	border-top: 1px solid grey;
 	border-left: 1px solid grey;
 	border-right: 1px solid grey;
+}
+
+ul li.battle:last-child {
+	border-bottom: 1px solid grey;
+
 }
 
 ul li.battle div.date-created {

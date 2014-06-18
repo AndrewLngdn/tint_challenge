@@ -14,7 +14,7 @@ router.get('/', function(req, res) {
 
 router.post('/create', function(req, res){
  	var d = new Date();
-    var curr_date = d.getDate() - 1; // -1 for testing
+    var curr_date = d.getDate(); // -1 for testing
     var curr_month = d.getMonth() + 1; //Months are zero based
     var curr_year = d.getFullYear();
 
