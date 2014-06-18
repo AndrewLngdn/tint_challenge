@@ -1,5 +1,6 @@
 body {
   padding: 50px;
+  padding-top: 20px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -9,6 +10,10 @@ a {
 
 li.example {
 	opacity: 0.5;
+}
+
+div.title-container {
+	text-align: center;
 }
 
 #wrapper {
@@ -43,7 +48,10 @@ div.tag2-container {
 }
 
 ul.battle-list{
-	padding: 5px;
+	padding-top: 5px;
+	padding-right: 0px;
+	padding-left: 0px;
+	padding-bottom: 0px;
 	margin: 0px;
 }
 
@@ -71,4 +79,16 @@ ul li.battle div.delete-text {
 
 ul li.battle div.delete-text:hover {
 	color: red;
+}
+
+input.hidden-submit {
+	visibility: hidden;
+}
+
+input#hashtag2, input#hashtag1 {
+	width: 30%;
+}
+
+input#hashtag2 {
+	float:right;
 }

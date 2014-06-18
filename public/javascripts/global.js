@@ -13,7 +13,6 @@ $(document).ready(function(){
 function populateBattleList(){
 
 	$.get('/battles', function(battles){
-
 		$.each(battles, function(id, battle){
 			$('.battle-list').append(battleTemplate(battle));
 		})	
@@ -34,7 +33,6 @@ function updateBattleCount(battle){
 	$battle.find('.tag1-count').text(battle.tag1_count);
 	$battle.find('.tag2-count').text(battle.tag2_count);
 }
-
 
 // delete click handler
 function deleteBattle(event){
