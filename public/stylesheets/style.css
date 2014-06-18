@@ -5,31 +5,8 @@ body {
   background-color: #F7F7F7;
 }
 
-canvas.ratio {
-	width: 100%;
-	height: 15px;
-	top: 0;
-	margin-bottom: -5px;
-}
-
 a {
   color: #00B7FF;
-}
-
-input:focus {
-	outline: none; 
-}
-
-#inner-editor{
-	height: 100%;
-}
-
-ul li.example {
-	opacity: 0.5;
-}
-
-div.title-container {
-	text-align: center;
 }
 
 #wrapper {
@@ -37,78 +14,23 @@ div.title-container {
 	width: 75%;
 }
 
-.tag1, .tag2 {
-	font-size: 2.1em;
+div.title-container {
+	text-align: center;
 }
 
-.tag1 {
-	color: rgb(247, 132, 8);
+/* --- canvas --- */
+canvas.ratio {
+	width: 100%;
+	height: 15px;
+	top: 0;
+	margin-bottom: -5px;
 }
 
-.tag2 {
-	color: rgb(8, 180, 247);
-}
 
-div.tag1-count, div.tag2-count {
-	font-size: 1.5em;
-	padding-top: 5px;
-}
+/* --- tag inputs --- */
 
-div.tag1-container {
-	float:left;
-}
-
-div.tag2-container {
-	float:right;
-	text-align: right;
-}
-
-ul.battle-list{
-	padding-top: 0px;
-	padding-right: 0px;
-	padding-left: 0px;
-	padding-bottom: 0px;
-	margin: 0px;
-}
-
-ul li.battle div.battle-text  {
-	padding: 10px 15px;
-
-}
-
-ul li.battle {
-	/*padding: 5px 15px;*/
-	padding-bottom: 0px;
-	background-color: white;
-	clear: both;
-	list-style-type: none;
-	border-top: 1px solid grey;
-	border-left: 1px solid grey;
-	border-right: 1px solid grey;
-	position: relative;
-}
-
-ul li.battle:last-child {
-	border-bottom: 1px solid grey;
-
-}
-
-ul li.battle div.date-created {
-	padding-top: 10px;
-	clear:both;
-	color: grey;
-}
-
-ul li.battle div.delete-text {
-	padding-bottom: 5px;
-	float:right;
-	/*clear: left;*/
-	display: inline-block;
-	cursor: pointer;
-}
-
-ul li.battle div.delete-text:hover {
-	color: red;
+input:focus {
+	outline: none; 
 }
 
 input.hidden-submit {
@@ -129,7 +51,6 @@ input#hashtag2, input#hashtag1 {
 input#hashtag2 {
 	float:right;
 }
-
 
 ::-webkit-input-placeholder {
    text-align: center;
@@ -154,3 +75,88 @@ input#hashtag2 {
 ::-ms-input-placeholder {  
    text-align: center;
 }
+
+
+/* --- battle list ---*/ 
+
+ul.battle-list{
+	padding-top: 0px;
+	padding-right: 0px;
+	padding-left: 0px;
+	padding-bottom: 0px;
+	margin: 0px;
+}
+
+ul li.example {
+	opacity: 0.5;
+}
+
+ul li.battle {
+	padding-bottom: 0px;
+	background-color: white;
+	clear: both;
+	list-style-type: none;
+	border-top: 1px solid grey;
+	border-left: 1px solid grey;
+	border-right: 1px solid grey;
+	position: relative;
+}
+
+ul li.battle:last-child {
+	border-bottom: 1px solid grey;
+
+}
+
+
+/* -- inside battle li --- */
+
+ul li.battle div.battle-text  {
+	padding: 10px 15px;
+
+}
+
+div.tag1, div.tag2 {
+	font-size: 2.1em;
+}
+
+div.tag1 {
+	color: rgb(247, 132, 8);
+}
+
+div.tag2 {
+	color: rgb(8, 180, 247);
+}
+
+div.tag1-count, div.tag2-count {
+	font-size: 1.5em;
+	padding-top: 5px;
+}
+
+div.tag1-container {
+	float:left;
+}
+
+div.tag2-container {
+	float:right;
+	text-align: right;
+}
+
+ul li.battle div.date-created {
+	padding-top: 10px;
+	clear:both;
+	color: grey;
+}
+
+ul li.battle div.delete-text {
+	padding-bottom: 5px;
+	float:right;
+	clear: left;
+	display: inline-block;
+	cursor: pointer;
+}
+
+ul li.battle div.delete-text:hover {
+	color: red;
+}
+
+

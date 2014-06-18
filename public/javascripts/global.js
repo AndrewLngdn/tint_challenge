@@ -15,32 +15,38 @@ function populateBattleList(){
 	$.get('/battles', function(battles){
 		$.each(battles, function(id, battle){
 			$('.battle-list').append(battleTemplate(battle));
-				var $battle = $('#' + battle._id);
-				var left_count = battle.tag1_count;
-				var right_count = battle.tag2_count;
-				var left_size = 300*(left_count/(left_count+right_count));
-				var right_size = 300-left_size;
-				var canvas = $battle.find('canvas').get(0);
-				if (canvas.getContext) {
-					var ctx = canvas.getContext('2d');
 
-					if (left_count === 0 && right_count === 0){
-						ctx.fillStyle = "grey";
-						ctx.fillRect(0,0, 300, 300);
-	
-					} else {
-						ctx.fillStyle = "rgb(247, 132, 8)";
-						ctx.fillRect(0,0, left_size, 300);
-						ctx.fillStyle = "rgb(8, 180, 247)";
-						ctx.fillRect(left_size,0, 300, 300);
-	
-					}
-					
-				}	
-				$battle.find('.tag1-count').text(battle.tag1_count);
-				$battle.find('.tag2-count').text(battle.tag2_count);
+			var $battle = $('#' + battle._id);
+			$battle.find('.tag1-count').text(battle.tag1_count);
+			$battle.find('.tag2-count').text(battle.tag2_count);
+
+			updateRatioBar(battle);
 		})	
 	})
+}
+
+// updates canvas ratio bar to reflect tag count
+function updateRatioBar(battle){
+	var $battle = $('#' + battle._id);
+
+
+	var left_count = battle.tag1_count;
+	var right_count = battle.tag2_count;
+	var left_size = 300*(left_count/(left_count+right_count));
+	var right_size = 300-left_size;
+	var canvas = $battle.find('canvas').get(0);
+	if (canvas.getContext) {
+		var ctx = canvas.getContext('2d');
+		if (left_count === 0 && right_count === 0){
+			ctx.fillStyle = "grey";
+			ctx.fillRect(0,0, 300, 300);
+		} else {
+			ctx.fillStyle = "rgb(247, 132, 8)";
+			ctx.fillRect(0,0, left_size, 300);
+			ctx.fillStyle = "rgb(8, 180, 247)";
+			ctx.fillRect(left_size,0, 300, 300);
+		}
+	}	
 }
 
 // functions for live updating
@@ -54,22 +60,9 @@ function initializeSocketIOServer(){
 
 function updateBattleCount(battle){
 	var $battle = $('#' + battle._id);
-	var left_count = battle.tag1_count;
-	var right_count = battle.tag2_count;
-	var left_size = 300*(left_count/(left_count+right_count));
-	var right_size = 300-left_size;
-	var canvas = $battle.find('canvas').get(0);
-	if (canvas.getContext) {
-		var ctx = canvas.getContext('2d');
-		ctx.fillStyle = "rgb(247, 132, 8)";
-		ctx.fillRect(0,0, left_size, 300);
-		ctx.fillStyle = "rgb(8, 180, 247)";
-		ctx.fillRect(left_size,0, 300, 300);
-
-	}	
 	$battle.find('.tag1-count').text(battle.tag1_count);
 	$battle.find('.tag2-count').text(battle.tag2_count);
-
+	updateRatioBar(battle);
 }
 
 // delete click handler
