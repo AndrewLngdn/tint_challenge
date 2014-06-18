@@ -16,14 +16,16 @@ li.example {
 	width: 75%;
 }
 
+.tag1, .tag2 {
+	font-size: 2.1em;
+}
+
 .tag1 {
 	color: rgb(247, 132, 8);
-	font-size: 2em;
 }
 
 .tag2 {
 	color: rgb(8, 180, 247);
-	font-size: 2em;
 }
 
 div.tag1-count, div.tag2-count {
@@ -53,9 +55,20 @@ ul li.battle {
 	border-top: 1px solid grey;
 }
 
-ul li.battle div.date-created{
-	padding-bottom: 10px;
+ul li.battle div.date-created {
 	padding-top: 10px;
 	clear:both;
+	color: grey;
 }
 
+ul li.battle div.delete-text {
+	padding-bottom: 5px;
+	float:right;
+	/*clear: left;*/
+	display: inline-block;
+	cursor: pointer;
+}
+
+ul li.battle div.delete-text:hover {
+	color: red;
+}

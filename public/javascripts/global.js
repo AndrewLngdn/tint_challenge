@@ -10,6 +10,8 @@ $(document).ready(function(){
 		addBattlesToPage();
 	})
 
+
+
 	var server = io.connect('http://localhost:3000');
 
 	server.on('battle_update', function(battle){
@@ -17,7 +19,18 @@ $(document).ready(function(){
 		battlesObject[battle._id] = battle;
 		updateBattleList(battle);
 	})
+	$(document).on('click', 'div.delete-text', deleteBattle);
 });
+
+function deleteBattle(event){
+	var battle_id = $(event.target).parents('li.battle').attr('id');
+	$.ajax({
+		type: 'DELETE',
+		url: '/battles/delete/' + battle_id
+		// url: '/battles/delete'
+	});
+
+}
 
 function updateBattleList(battle){
 	var $battle = $('#' + battle._id)
@@ -41,7 +54,9 @@ function battleTemplate(battle){
 	battleHTML += "        <div class='tag2'>" + battle.tag2 + "</div>";
 	battleHTML += "        <div class='tag2-count'>" + battle.tag2_count + "</div>";
 	battleHTML += "    </div>";
-	battleHTML += "    <div class='date-created'>Created on " + battle.created_at + "</div>";
+	battleHTML += "    <div class='date-created'>created on " + battle.created_at; ;
+	battleHTML += "    <div class='delete-text'>delete </div> </div>";
+
 	battleHTML += "</div>";
 
 	return battleHTML;

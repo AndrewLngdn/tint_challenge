@@ -69,12 +69,9 @@ var server = app.listen(app.get('port'), function() {
 // module.exports = server;
 var io = require('socket.io').listen(server);
 
-
-
 var updateEmitter = require('./lib/twitter-capture');
 
 updateEmitter.on('battle_update', function(battle){
-    // console.log('updating battle!!! ------');
     io.sockets.emit('battle_update', battle);
 });
 

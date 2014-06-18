@@ -7,10 +7,7 @@ var Battle = mongoose.model('Battle');
 /* GET users listing. */
 router.get('/', function(req, res) {
   Battle.find(function(err, battles, count){
-  	// res.render('index', {
-  	// 	battles: battles.reverse()
-  	// });
-  res.send(battles.reverse());
+	  res.send(battles.reverse());
   })
 });
 
@@ -19,6 +16,7 @@ router.post('/create', function(req, res){
     var curr_date = d.getDate() - 1; // -1 for testing
     var curr_month = d.getMonth() + 1; //Months are zero based
     var curr_year = d.getFullYear();
+
 	new Battle({
 		tag1: req.body.tag1,
 		tag1_count: 0,
@@ -26,10 +24,17 @@ router.post('/create', function(req, res){
 		tag2_count: 0,
 		created_at: curr_year + "-" + curr_month + "-" + curr_date
 	}).save(function(err, battle, count){
-		console.log("error: " + err);
-		console.log("battle: " + battle);
 		res.redirect('/');
 	})
 });
+
+router.delete('/delete/:id', function(req, res){
+	var battle_id = req.params.id;
+	console.log('got delete with id ' + battle_id);
+	Battle.findById(battle_id, function(err, battle){
+		battle.remove();
+	});
+});
+
 
 module.exports = router;
