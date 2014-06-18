@@ -1,6 +1,6 @@
 body {
   padding: 50px;
-  padding-top: 20px;
+  padding-top: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -48,7 +48,7 @@ div.tag2-container {
 }
 
 ul.battle-list{
-	padding-top: 5px;
+	padding-top: 0px;
 	padding-right: 0px;
 	padding-left: 0px;
 	padding-bottom: 0px;
@@ -61,6 +61,8 @@ ul li.battle {
 	clear: both;
 	list-style-type: none;
 	border-top: 1px solid grey;
+	border-left: 1px solid grey;
+	border-right: 1px solid grey;
 }
 
 ul li.battle div.date-created {
@@ -83,12 +85,36 @@ ul li.battle div.delete-text:hover {
 
 input.hidden-submit {
 	visibility: hidden;
+	height: 1px;
 }
 
 input#hashtag2, input#hashtag1 {
 	width: 30%;
+	height: 3em;
+	border-top: 1px solid grey;
+	border-left: 1px solid grey;
+	border-right: 1px solid grey;
+	border-bottom: none;
+	padding-bottom: 0px;
 }
 
 input#hashtag2 {
 	float:right;
+}
+
+
+::-webkit-input-placeholder {
+   text-align: center;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+   text-align: center;
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+   text-align: center;
+}
+
+::-ms-input-placeholder {  
+   text-align: center;
 }
