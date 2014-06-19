@@ -8,17 +8,19 @@ To run:
 
 MongoDB must be running. If `DATABASE_URL` environment variable isn't set, the server will attempt to connect to `mongodb://localhost:27017`. 
 
-Make sure you run `npm install`
+
 
 You must define  
 `TWITTER_CONSUMER_KEY` `TWITTER_CONSUMER_SECRET`
 `TWITTER_ACCESS_TOKEN` `TWITTER_ACCESS_TOKEN_SECRET`  
 environment variables to connect to Twitter. 
-You can define these before running 'npm start' in the console by entering
+You can define these and start the server by entering
 
 `$ TWITTER_CONSUMER_KEY=your_key ...other keys... npm start`
 
-or by defining them in a shell startup script. 
+or by defining them in a shell startup script. If they are already definded, just run
+`npm install`
+`npm start`
 
 This would be an interesting addition to Tint as a real-time voting system for displays. A user could start a battle at any public event to poll the crowd. It could also be used personally to measure awareness of brands by counting tags on twitter. A customer could start multiple tag battles over different periods to get a sense of how the numbers change over time.   
 
