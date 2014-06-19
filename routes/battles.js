@@ -32,8 +32,6 @@ router.post('/create', function(req, res){
 		// our twitter stream
 		updateEmitter.emit('update_tags');
 	});
-
-
 });
 
 router.delete('/delete/:id', function(req, res){
@@ -43,7 +41,6 @@ router.delete('/delete/:id', function(req, res){
 		if (err){
 			res.send(err);	
 		} else {
-			console.log('deleting ' + battle);
 			battle.remove();
 			res.send('');
 		}
