@@ -39,9 +39,11 @@ router.post('/create', function(req, res){
 router.delete('/delete/:id', function(req, res){
 	var battle_id = req.params.id;
 	Battle.findById(battle_id, function(err, battle){
-		if (err !== undefined){
+		console.log('error ' + err);
+		if (err){
 			res.send(err);	
 		} else {
+			console.log('deleting ' + battle);
 			battle.remove();
 			res.send('');
 		}
