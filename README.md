@@ -8,6 +8,8 @@ To run:
 
 MongoDB must be running. If `DATABASE_URL` environment variable isn't set, the server will attempt to connect to `mongodb://localhost:27017`. 
 
+Make sure you run `npm install`
+
 You must define  
 `TWITTER_CONSUMER_KEY` `TWITTER_CONSUMER_SECRET`
 `TWITTER_ACCESS_TOKEN` `TWITTER_ACCESS_TOKEN_SECRET`  
