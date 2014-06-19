@@ -14,4 +14,4 @@ var battleSchema = new Schema({
 });
 
 mongoose.model('Battle', battleSchema);
-mongoose.connect('mongodb://localhost:27017');
+mongoose.connect('mongodb://nodejitsu:b7ff5e5e5cf66854fd84107f574b485c@troup.mongohq.com:10096/nodejitsudb3297978863');
