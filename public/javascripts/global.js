@@ -37,7 +37,7 @@ function updateRatioBar(battle){
 	var left_size = 300*(left_count/(left_count+right_count));
 	var right_size = 300-left_size;
 	var canvas = $battle.find('canvas').get(0);
-	if (canvas.getContext) {
+	if (canvas !== undefined && canvas.getContext) {
 		var ctx = canvas.getContext('2d');
 		if (left_count === 0 && right_count === 0){
 			ctx.fillStyle = "grey";
@@ -53,7 +53,7 @@ function updateRatioBar(battle){
 
 // functions for live updating
 function initializeSocketIOServer(){
-	var server = io.connect('http://localhost:3000');
+	var server = io.connect();
 
 	server.on('battle_update', function(battle){
 		if (battle === undefined){

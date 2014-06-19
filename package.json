@@ -1,6 +1,6 @@
 {
   "name": "tint_challenge",
-  "version": "0.0.1-3",
+  "version": "0.0.1-6",
   "private": true,
   "scripts": {
     "start": "node ./app.js"
