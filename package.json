@@ -1,6 +1,6 @@
 {
   "name": "tint_challenge",
-  "version": "0.0.1-37",
+  "version": "0.0.1-40",
   "private": true,
   "scripts": {
     "start": "node ./app.js"
@@ -16,7 +16,8 @@
     "twit": "latest",
     "socket.io": "latest",
     "connect": "*",
-    "mongoose": "*"
+    "mongoose": "*",
+    "coffee-middlware": "latest"
   },
   "subdomain": "andrewlngdn-tint_challenge",
   "engines": {
