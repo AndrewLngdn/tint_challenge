@@ -4,8 +4,8 @@
 # // Hierarchy 
 # // BattleTable
 # //		BattleInput
-# //		BattleExample
 # //		BattleList
+# //			BattleExample
 # //			Battle
 
 BATTLES = [
@@ -44,11 +44,8 @@ BattleTable = React.createClass
 	render: ->
 		<div id='wrapper'>
 			<BattleInput />
-			<BattleExample />
+			<BattleList battles={this.props.battles}/>
 		</div>
-
-#<BattleList battles={this.props.battles}/>
-
 
 BattleInput = React.createClass
 	render: ->
@@ -59,23 +56,51 @@ BattleInput = React.createClass
 			</form>
 		</div>
 
+			
+
 BattleExample = React.createClass
 	render: ->
-		<ul className='battle-list'>
-			<li className="battle example">
-				<div className='battle-text'>
-					<div className='tag1-container'>
-						<div className="tag1">#brand</div>
-						<div className="tag1-count">Count of tags on Twitter</div>
-					</div>
-					<div className='tag2-container'>
-						<div className='tag2'>#brand2</div>
-						<div className='tag2-count'>Count of tags on Twitter</div>
-					</div>
-					<div className='date-created'>created since this date</div>
+		<li className="battle example">
+			<div className='battle-text'>
+				<div className='tag1-container'>
+					<div className="tag1">#brand</div>
+					<div className="tag1-count">Count of tags on Twitter</div>
 				</div>
-			</li>
+				<div className='tag2-container'>
+					<div className='tag2'>#brand2</div>
+					<div className='tag2-count'>Count of tags on Twitter</div>
+				</div>
+				<div className='date-created'>created since this date</div>
+			</div>
+		</li>
+
+BattleList = (BattleList = React).createClass
+	render: ->
+		battleNodes = this.props.battles.map (battle) ->
+			<Battle battle={battle} />
+		<ul className='battle-list'>
+			<BattleExample />
+			{battleNodes}
 		</ul>
+
+		
+
+Battle = (Battle = React).createClass
+	render: ->
+		battle = this.props.battle;
+		<li className="battle">
+			<div className='battle-text'>
+				<div className='tag1-container'>
+					<div className="tag1">{battle.tag1}</div>
+					<div className="tag1-count">{battle.tag1_count}</div>
+				</div>
+				<div className='tag2-container'>
+					<div className='tag2'>{battle.tag2}</div>
+					<div className='tag2-count'>{battle.tag2_count}</div>
+				</div>
+				<div className='date-created'>{battle.created_at}</div>
+			</div>
+		</li>
 
 
  # ul.battle-list
