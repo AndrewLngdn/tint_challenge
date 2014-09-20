@@ -192,6 +192,30 @@
   });
 
   Battle = (Battle = React).createClass({
+    componentDidUpdate: function(prevProps, prevState) {
+      this.updateCanvas();
+    },
+    updateCanvas: function() {
+      var battle, canvas, ctx, left_count, left_size, right_count, right_size;
+      battle = this.props.battle;
+      left_count = battle.tag1_count;
+      right_count = battle.tag2_count;
+      left_size = 300 * (left_count / (left_count + right_count));
+      right_size = 300 - left_size;
+      canvas = this.refs.canvas.getDOMNode();
+      if (canvas) {
+        ctx = canvas.getContext('2d');
+        if (left_count === 0 && right_count === 0) {
+          ctx.fillStyle = "grey";
+          ctx.fillRect(0, 0, 300, 300);
+        } else {
+          ctx.fillStyle = "rgb(247, 132, 8)";
+          ctx.fillRect(0, 0, left_size, 300);
+          ctx.fillStyle = "rgb(8, 180, 247)";
+          ctx.fillRect(left_size, 0, 300, 300);
+        }
+      }
+    },
     handleDelete: function(battle_id) {
       this.props.handleDelete(this.props.battle._id);
     },
@@ -224,10 +248,11 @@
       }, battle.created_at, React.DOM.div({
         "className": 'delete-text',
         "onClick": this.handleDelete
-      }, "delete")), React.DOM.canvas({
+      }, "delete"))), React.DOM.canvas({
         "className": 'ratio',
+        "ref": 'canvas',
         "id": canvasId
-      })));
+      }));
     }
   });
 

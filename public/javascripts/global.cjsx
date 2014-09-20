@@ -157,6 +157,31 @@ BattleList = (BattleList = React).createClass
 
 
 Battle = (Battle = React).createClass
+	componentDidUpdate: (prevProps, prevState) ->
+		this.updateCanvas()
+
+		return
+
+	updateCanvas: ->
+		battle = this.props.battle
+		left_count = battle.tag1_count
+		right_count = battle.tag2_count
+		left_size = 300*(left_count/(left_count+right_count))
+		right_size = 300-left_size
+		canvas = this.refs.canvas.getDOMNode()
+
+		if canvas
+			ctx = canvas.getContext('2d')
+			if left_count == 0 && right_count == 0
+				ctx.fillStyle = "grey";
+				ctx.fillRect(0,0, 300, 300)
+			else
+				ctx.fillStyle = "rgb(247, 132, 8)"
+				ctx.fillRect(0,0, left_size, 300)
+				ctx.fillStyle = "rgb(8, 180, 247)"
+				ctx.fillRect(left_size,0, 300, 300)
+
+		return
 	handleDelete: (battle_id)->
 		this.props.handleDelete(this.props.battle._id)
 		return
@@ -178,8 +203,8 @@ Battle = (Battle = React).createClass
 					{battle.created_at}
 					<div className='delete-text' onClick={this.handleDelete}>delete</div>
 				</div>
-				<canvas className='ratio' id={canvasId} /> 
 			</div>
+			<canvas className='ratio' ref='canvas' id={canvasId} /> 
 		</li>
 
 
