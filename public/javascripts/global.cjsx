@@ -8,36 +8,6 @@
 # //			BattleExample
 # //			Battle
 
-BATTLES = [
-	{
-		tag1: "#brazil", 
-		tag2: "#germany", 
-		tag1_count: 2676, 
-		tag2_count: 2045, 
-		created_at: "2014-7-8"
-	},
-	{
-		tag1: "#worldcup", 
-		tag2: "#worldcup2014", 
-		tag1_count: 7, 
-		tag2_count: 7, 
-		created_at: "2014-6-24"
-	},
-	{
-		tag1: "#android", 
-		tag2: "#ipad", 
-		tag1_count: 66820, 
-		tag2_count: 42376, 
-		created_at: "2014-6-24"
-	},
-	{
-		tag1: "#coke", 
-		tag2: "#pepsi", 
-		tag1_count: 291, 
-		tag2_count: 80, 
-		created_at: "2014-6-19"
-	},
-];
 
 
 BattleTable = React.createClass
@@ -45,6 +15,8 @@ BattleTable = React.createClass
 		{battles:[]}
 	componentDidMount: ->
 		this.loadBattles()
+		this.initializeSocketIO()
+
 		return
 	loadBattles: ->
 		$.ajax({
@@ -61,6 +33,22 @@ BattleTable = React.createClass
 			).bind(this)
 		})
 		return
+	initializeSocketIO: ->
+		this.props.server.on('battle_update', this.updateBattle)
+		return
+
+	updateBattle: (battle) ->
+		battles = this.state.battles
+		battle_arr = $.grep(battles, (b)->
+			return (b._id is battle._id)
+		)
+		if battle_arr.length == 1
+			old_battle = battle_arr[0]
+			index = battles.indexOf(battle_arr[0])
+			battles[index] = battle
+			this.setState({battles:battles})
+		return
+
 	formatBattleObj: (battle_tags)->
 		d = new Date()
 		curr_date = d.getDate()
@@ -114,7 +102,9 @@ BattleTable = React.createClass
 				console.error(this.props.battleUrl, status, err.toString())
 				return
 			).bind(this)
-		});
+		})
+
+
 	render: ->
 		<div id='wrapper'>
 			<BattleInput onSubmit={this.handleSubmit}/>
@@ -193,63 +183,14 @@ Battle = (Battle = React).createClass
 		</li>
 
 
- # ul.battle-list
- #   li.battle.example
- #     .battle-text
- #       .tag1-container
- #         .tag1 #brand1
- #         .tag1-count Count of tags on twitter
- #       .tag2-container
- #         .tag2 #brand2
- #         .tag2-count Count of tags on twitter
- #       .date-created since this date
-	
-
 $(document).ready ->
-	React.renderComponent(<BattleTable battles={BATTLES} battleUrl='battles'/>, document.body);
+	server = io.connect()
+	React.renderComponent(<BattleTable battles={BATTLES} 
+										battleUrl='battles'
+										server={server}/>, document.body);
 
 
-#   // #wrapper
-#   //   .form-container
-#   //     form(action="/battles/create" method="post")
-#   //       input#hashtag1(type='text', placeholder='enter first hashtag', name='tag1')
-#   //       input#hashtag2(type='text', placeholder='enter second hashtag', name='tag2')
-#   //       input.hidden-submit(type='submit')
-# 
-# 
-# // $(document).ready(function(){
-# // 	// get our battle list from the server
-# // 	// populateBattleList();
-# // 	// initializeSocketIOServer();
-# 
-# // 	// click handlers
-# // 	$(document).on('click', 'div.delete-text', deleteBattle);
-# // });
-# 
-# 
-# // // functions for setting up the page the first time
-# // function populateBattleList(){
-# 
-# // 	$.get('/battles', function(battles){
-# // 		$.each(battles, function(id, battle){
-# // 			$('.battle-list').append(battleTemplate(battle));
-# 
-# // 			var $battle = $('#' + battle._id);
-# // 			$battle.find('.tag1-count').text(battle.tag1_count);
-# // 			$battle.find('.tag2-count').text(battle.tag2_count);
-# 
-# // 			if (battle === undefined){
-# // 				console.log('battle is undefined in populate list');
-# // 			}
-# // 			updateRatioBar(battle);
-# // 		})	
-# // 	})
-# // }
-# 
-# // // updates canvas ratio bar to reflect tag count
-# // function updateRatioBar(battle){
-# // 	var $battle = $('#' + battle._id);
-# 
+
 # 
 # // 	var left_count = battle.tag1_count;
 # // 	var right_count = battle.tag2_count;
@@ -269,65 +210,34 @@ $(document).ready ->
 # // 		}
 # // 	}	
 # // }
-# 
-# // // functions for live updating
-# // function initializeSocketIOServer(){
-# // 	var server = io.connect();
-# 
-# // 	server.on('battle_update', function(battle){
-# // 		if (battle === undefined){
-# // 			console.log('battle is undefined in server update');
-# // 		}
-# // 		updateBattleCount(battle);
-# // 	});
-# // }
-# 
-# // function updateBattleCount(battle){
-# // 	var $battle = $('#' + battle._id);
-# // 	$battle.find('.tag1-count').text(battle.tag1_count);
-# // 	$battle.find('.tag2-count').text(battle.tag2_count);
-# // 	updateRatioBar(battle);
-# // }
-# 
-# // // delete click handler
-# // function deleteBattle(event){
-# 
-# // 	var battle_id = $(event.target).parents('li.battle').attr('id');
-# // 	$.ajax({
-# // 		type: 'DELETE',
-# // 		url: '/battles/delete/' + battle_id
-# // 	}).done(function(){
-# // 		$('#' + battle_id).remove();
-# // 	});
-# // }
-# 
-# 
-# // // battle li template function
-# // function battleTemplate(battle){
-# // 	var battleHTML = "";
-# // 	battleHTML += "<li class='battle' id='" + battle._id + "'>";
-# // 	battleHTML += "     <div class='battle-text'>";
-# // 	battleHTML += "         <div class='tag1-container'>";
-# // 	battleHTML += "             <div class='tag1'>" + battle.tag1 + "</div>";
-# // 	battleHTML += "             <div class='tag1-count'>" + battle.tag1_count + "</div>";
-# // 	battleHTML += "         </div>";
-# // 	battleHTML += "         <div class='tag2-container'>";
-# // 	battleHTML += "             <div class='tag2'>" + battle.tag2 + "</div>";
-# // 	battleHTML += "             <div class='tag2-count'>" + battle.tag2_count + "</div>";
-# // 	battleHTML += "         </div>";
-# // 	battleHTML += "         <div class='date-created'>";
-# // 	battleHTML += "             " + battle.created_at;
-# // 	battleHTML += "             <div class='delete-text'>delete</div>"
-# // 	battleHTML += "         </div>";
-# // 	battleHTML += "    </div>";
-# // 	battleHTML += "    <canvas class='ratio' id='canvas-" + battle._id + "'></canvas>"
-# // 	battleHTML += "</div>";
-# 
-# // 	return battleHTML;
-# // }
-# 
-# 
-# 
-# 
-# 
-# 
+
+BATTLES = [
+	{
+		tag1: "#brazil", 
+		tag2: "#germany", 
+		tag1_count: 2676, 
+		tag2_count: 2045, 
+		created_at: "2014-7-8"
+	},
+	{
+		tag1: "#worldcup", 
+		tag2: "#worldcup2014", 
+		tag1_count: 7, 
+		tag2_count: 7, 
+		created_at: "2014-6-24"
+	},
+	{
+		tag1: "#android", 
+		tag2: "#ipad", 
+		tag1_count: 66820, 
+		tag2_count: 42376, 
+		created_at: "2014-6-24"
+	},
+	{
+		tag1: "#coke", 
+		tag2: "#pepsi", 
+		tag1_count: 291, 
+		tag2_count: 80, 
+		created_at: "2014-6-19"
+	},
+];

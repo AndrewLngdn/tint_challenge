@@ -2,34 +2,6 @@
 (function() {
   var BATTLES, Battle, BattleExample, BattleInput, BattleList, BattleTable;
 
-  BATTLES = [
-    {
-      tag1: "#brazil",
-      tag2: "#germany",
-      tag1_count: 2676,
-      tag2_count: 2045,
-      created_at: "2014-7-8"
-    }, {
-      tag1: "#worldcup",
-      tag2: "#worldcup2014",
-      tag1_count: 7,
-      tag2_count: 7,
-      created_at: "2014-6-24"
-    }, {
-      tag1: "#android",
-      tag2: "#ipad",
-      tag1_count: 66820,
-      tag2_count: 42376,
-      created_at: "2014-6-24"
-    }, {
-      tag1: "#coke",
-      tag2: "#pepsi",
-      tag1_count: 291,
-      tag2_count: 80,
-      created_at: "2014-6-19"
-    }
-  ];
-
   BattleTable = React.createClass({
     getInitialState: function() {
       return {
@@ -38,6 +10,7 @@
     },
     componentDidMount: function() {
       this.loadBattles();
+      this.initializeSocketIO();
     },
     loadBattles: function() {
       $.ajax({
@@ -53,6 +26,24 @@
           console.error(this.props.notesUrl, status, err.toString());
         }).bind(this)
       });
+    },
+    initializeSocketIO: function() {
+      this.props.server.on('battle_update', this.updateBattle);
+    },
+    updateBattle: function(battle) {
+      var battle_arr, battles, index, old_battle;
+      battles = this.state.battles;
+      battle_arr = $.grep(battles, function(b) {
+        return b._id === battle._id;
+      });
+      if (battle_arr.length === 1) {
+        old_battle = battle_arr[0];
+        index = battles.indexOf(battle_arr[0]);
+        battles[index] = battle;
+        this.setState({
+          battles: battles
+        });
+      }
     },
     formatBattleObj: function(battle_tags) {
       var battle, curr_date, curr_month, curr_year, d;
@@ -241,10 +232,41 @@
   });
 
   $(document).ready(function() {
+    var server;
+    server = io.connect();
     return React.renderComponent(BattleTable({
       "battles": BATTLES,
-      "battleUrl": 'battles'
+      "battleUrl": 'battles',
+      "server": server
     }), document.body);
   });
+
+  BATTLES = [
+    {
+      tag1: "#brazil",
+      tag2: "#germany",
+      tag1_count: 2676,
+      tag2_count: 2045,
+      created_at: "2014-7-8"
+    }, {
+      tag1: "#worldcup",
+      tag2: "#worldcup2014",
+      tag1_count: 7,
+      tag2_count: 7,
+      created_at: "2014-6-24"
+    }, {
+      tag1: "#android",
+      tag2: "#ipad",
+      tag1_count: 66820,
+      tag2_count: 42376,
+      created_at: "2014-6-24"
+    }, {
+      tag1: "#coke",
+      tag2: "#pepsi",
+      tag1_count: 291,
+      tag2_count: 80,
+      created_at: "2014-6-19"
+    }
+  ];
 
 }).call(this);
