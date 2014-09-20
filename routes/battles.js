@@ -30,7 +30,7 @@ router.post('/create', function(req, res){
 		if (err){
 			console.log(err);
 		}
-		res.send('{}');
+		res.send(battle._id);
 		// res.redirect('/');
 		// everytime a new battle is added, update the tags on
 		// our twitter stream

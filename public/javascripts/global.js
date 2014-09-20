@@ -45,12 +45,12 @@
         url: this.props.battleUrl,
         dataType: 'json',
         success: (function(battles) {
-          return this.setState({
+          this.setState({
             battles: battles
           });
         }).bind(this),
         error: (function(xhr, status, err) {
-          return console.error(this.props.notesUrl, status, err.toString());
+          console.error(this.props.notesUrl, status, err.toString());
         }).bind(this)
       });
     },
@@ -72,11 +72,25 @@
       var battle, battles;
       battles = this.state.battles;
       battle = this.formatBattleObj(battle_tags);
-      battles.unshift(battle);
+      this.postToServer(battle);
+    },
+    deleteBattle: function(battle_id) {
+      var battle_arr, battles, index;
+      battles = this.state.battles;
+      battle_arr = $.grep(battles, function(b) {
+        return b._id === battle_id;
+      });
+      if (battle_arr.length === 1) {
+        index = battles.indexOf(battle_arr[0]);
+        battles.splice(index, 1);
+      }
       this.setState({
         battles: battles
       });
-      this.postToServer(battle);
+      $.ajax({
+        type: 'DELETE',
+        url: '/battles/delete/' + battle_id
+      });
     },
     postToServer: function(battle) {
       return $.ajax({
@@ -84,7 +98,15 @@
         dataType: 'json',
         type: 'POST',
         data: battle,
-        success: (function(data) {}).bind(this),
+        success: (function(battle_id) {
+          var battles;
+          battles = this.state.battles;
+          battle._id = battle_id;
+          battles.unshift(battle);
+          this.setState({
+            battles: battles
+          });
+        }).bind(this),
         error: (function(xhr, status, err) {
           console.error(this.props.battleUrl, status, err.toString());
         }).bind(this)
@@ -96,7 +118,8 @@
       }, BattleInput({
         "onSubmit": this.handleSubmit
       }), BattleList({
-        "battles": this.state.battles
+        "battles": this.state.battles,
+        "handleDelete": this.deleteBattle
       }));
     }
   });
@@ -165,11 +188,12 @@
   BattleList = (BattleList = React).createClass({
     render: function() {
       var battleNodes;
-      battleNodes = this.props.battles.map(function(battle) {
+      battleNodes = this.props.battles.map((function(battle) {
         return Battle({
+          "handleDelete": this.props.handleDelete,
           "battle": battle
         });
-      });
+      }).bind(this));
       return React.DOM.ul({
         "className": 'battle-list'
       }, BattleExample(null), battleNodes);
@@ -177,12 +201,19 @@
   });
 
   Battle = (Battle = React).createClass({
+    handleDelete: function(battle_id) {
+      this.props.handleDelete(this.props.battle._id);
+    },
     render: function() {
       var battle, canvasId;
       battle = this.props.battle;
-      canvasId = 'canvas-#{battle.id}';
+      canvasId = 'canvas-' + battle._id;
+      if (!battle._id) {
+        battle._id = '';
+      }
       return React.DOM.li({
-        "className": "battle"
+        "className": "battle",
+        "id": battle._id
       }, React.DOM.div({
         "className": 'battle-text'
       }, React.DOM.div({
@@ -199,7 +230,10 @@
         "className": 'tag2-count'
       }, battle.tag2_count)), React.DOM.div({
         "className": 'date-created'
-      }, battle.created_at), React.DOM.canvas({
+      }, battle.created_at, React.DOM.div({
+        "className": 'delete-text',
+        "onClick": this.handleDelete
+      }, "delete")), React.DOM.canvas({
         "className": 'ratio',
         "id": canvasId
       })));

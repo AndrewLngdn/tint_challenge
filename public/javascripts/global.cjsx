@@ -53,9 +53,11 @@ BattleTable = React.createClass
 			dataType: 'json',
 			success: ((battles) ->
 				this.setState({battles: battles})
+				return
 			).bind(this),
 			error: ((xhr, status, err) ->
 				console.error(this.props.notesUrl, status, err.toString());
+				return
 			).bind(this)
 		})
 		return
@@ -72,23 +74,40 @@ BattleTable = React.createClass
 			tag2_count: 0,
 			created_at: curr_year + "-" + curr_month + "-" + curr_date
 		}
-
 	handleSubmit: (battle_tags)->
 		battles = this.state.battles
-
 		battle = this.formatBattleObj(battle_tags)
-		battles.unshift(battle)
-
-		this.setState({battles: battles})
 		this.postToServer(battle)
 		return
+	deleteBattle: (battle_id) ->
+		battles = this.state.battles
+		battle_arr = $.grep(battles, (b)->
+			return (b._id is battle_id)
+		)
+		if battle_arr.length == 1
+			index = battles.indexOf(battle_arr[0])
+			battles.splice(index, 1)
+
+		this.setState({battles: battles})
+
+		$.ajax({
+			type: 'DELETE',
+			url: '/battles/delete/' + battle_id
+		})
+		return
+
 	postToServer: (battle)->
 		$.ajax({
 			url: this.props.battleUrl + '/create',
 			dataType: 'json', 
 			type: 'POST',
 			data: battle,
-			success: ((data)->
+			success: ((battle_id)->
+				battles = this.state.battles
+				battle._id = battle_id
+				battles.unshift(battle)
+				this.setState({battles: battles})
+				return
 
 			).bind(this),
 			error: ((xhr, status, err) ->
@@ -96,16 +115,15 @@ BattleTable = React.createClass
 				return
 			).bind(this)
 		});
-
 	render: ->
 		<div id='wrapper'>
 			<BattleInput onSubmit={this.handleSubmit}/>
-			<BattleList battles={this.state.battles}/>
+			<BattleList battles={this.state.battles} handleDelete={this.deleteBattle}/>
 		</div>
 
 BattleInput = React.createClass
 	handleSubmit: (e)->
-		e.preventDefault();
+		e.preventDefault()
 		tag1 = this.refs.tag1.getDOMNode().value.trim()
 		tag2 = this.refs.tag2.getDOMNode().value.trim()
 		this.props.onSubmit {tag1: tag1, tag2: tag2}
@@ -120,7 +138,6 @@ BattleInput = React.createClass
 			</form>
 		</div>
 
-			
 
 BattleExample = React.createClass
 	render: ->
@@ -140,20 +157,24 @@ BattleExample = React.createClass
 
 BattleList = (BattleList = React).createClass
 	render: ->
-		battleNodes = this.props.battles.map (battle) ->
-			<Battle battle={battle} />
+		battleNodes = this.props.battles.map ((battle) ->
+			<Battle handleDelete={this.props.handleDelete}  battle={battle} />
+			).bind(this)
 		<ul className='battle-list'>
 			<BattleExample />
 			{battleNodes}
 		</ul>
 
-		
 
 Battle = (Battle = React).createClass
+	handleDelete: (battle_id)->
+		this.props.handleDelete(this.props.battle._id)
+		return
 	render: ->
 		battle = this.props.battle;
-		canvasId = 'canvas-#{battle.id}'
-		<li className="battle">
+		canvasId = 'canvas-' + battle._id
+		if !battle._id then battle._id = ''
+		<li className="battle" id={battle._id}>
 			<div className='battle-text'>
 				<div className='tag1-container'>
 					<div className="tag1">{battle.tag1}</div>
@@ -163,7 +184,10 @@ Battle = (Battle = React).createClass
 					<div className='tag2'>{battle.tag2}</div>
 					<div className='tag2-count'>{battle.tag2_count}</div>
 				</div>
-				<div className='date-created'>{battle.created_at}</div>
+				<div className='date-created'>
+					{battle.created_at}
+					<div className='delete-text' onClick={this.handleDelete}>delete</div>
+				</div>
 				<canvas className='ratio' id={canvasId} /> 
 			</div>
 		</li>
