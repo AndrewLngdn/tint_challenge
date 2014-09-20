@@ -41,18 +41,82 @@ BATTLES = [
 
 
 BattleTable = React.createClass
+	getInitialState: ->
+		{battles:[]}
+	componentDidMount: ->
+		this.loadBattles()
+		return
+	loadBattles: ->
+		$.ajax({
+			type: 'GET'
+			url: this.props.battleUrl,
+			dataType: 'json',
+			success: ((battles) ->
+				this.setState({battles: battles})
+			).bind(this),
+			error: ((xhr, status, err) ->
+				console.error(this.props.notesUrl, status, err.toString());
+			).bind(this)
+		})
+		return
+	formatBattleObj: (battle_tags)->
+		d = new Date()
+		curr_date = d.getDate()
+		curr_month = d.getMonth() + 1
+		curr_year = d.getFullYear()
+
+		battle = {
+			tag1: battle_tags.tag1,
+			tag2: battle_tags.tag2,
+			tag1_count: 0,
+			tag2_count: 0,
+			created_at: curr_year + "-" + curr_month + "-" + curr_date
+		}
+
+	handleSubmit: (battle_tags)->
+		battles = this.state.battles
+
+		battle = this.formatBattleObj(battle_tags)
+		battles.unshift(battle)
+
+		this.setState({battles: battles})
+		this.postToServer(battle)
+		return
+	postToServer: (battle)->
+		$.ajax({
+			url: this.props.battleUrl + '/create',
+			dataType: 'json', 
+			type: 'POST',
+			data: battle,
+			success: ((data)->
+
+			).bind(this),
+			error: ((xhr, status, err) ->
+				console.error(this.props.battleUrl, status, err.toString())
+				return
+			).bind(this)
+		});
+
 	render: ->
 		<div id='wrapper'>
-			<BattleInput />
-			<BattleList battles={this.props.battles}/>
+			<BattleInput onSubmit={this.handleSubmit}/>
+			<BattleList battles={this.state.battles}/>
 		</div>
 
 BattleInput = React.createClass
+	handleSubmit: (e)->
+		e.preventDefault();
+		tag1 = this.refs.tag1.getDOMNode().value.trim()
+		tag2 = this.refs.tag2.getDOMNode().value.trim()
+		this.props.onSubmit {tag1: tag1, tag2: tag2}
+		this.refs.tag1.getDOMNode().value = ''
+		this.refs.tag2.getDOMNode().value = ''
 	render: ->
 		<div className='form-container'>
-			<form action="/battles/create" method="post">
-				<input id="hashtag1" type="text" placeholder="enter first hashtag" name="tag1" />
-				<input id="hashtag2" type="text" placeholder="enter second hashtag" name="tag2" />
+			<form onSubmit={this.handleSubmit}>
+				<input id="hashtag1" type="text" placeholder="enter first hashtag" name="tag1" ref="tag1" />
+				<input id="hashtag2" type="text" placeholder="enter second hashtag" name="tag2" ref="tag2" />
+				<input className='hidden-submit' type='submit' />
 			</form>
 		</div>
 
@@ -88,6 +152,7 @@ BattleList = (BattleList = React).createClass
 Battle = (Battle = React).createClass
 	render: ->
 		battle = this.props.battle;
+		canvasId = 'canvas-#{battle.id}'
 		<li className="battle">
 			<div className='battle-text'>
 				<div className='tag1-container'>
@@ -99,6 +164,7 @@ Battle = (Battle = React).createClass
 					<div className='tag2-count'>{battle.tag2_count}</div>
 				</div>
 				<div className='date-created'>{battle.created_at}</div>
+				<canvas className='ratio' id={canvasId} /> 
 			</div>
 		</li>
 
@@ -116,8 +182,7 @@ Battle = (Battle = React).createClass
 	
 
 $(document).ready ->
-	console.log(document.getElementById("#wrapper"));
-	React.renderComponent(<BattleTable battles={BATTLES} />, document.body);
+	React.renderComponent(<BattleTable battles={BATTLES} battleUrl='battles'/>, document.body);
 
 
 #   // #wrapper

@@ -27,7 +27,11 @@ router.post('/create', function(req, res){
 		tag2_count: 0,
 		created_at: curr_year + "-" + curr_month + "-" + curr_date
 	}).save(function(err, battle, count){
-		res.redirect('/');
+		if (err){
+			console.log(err);
+		}
+		res.send('{}');
+		// res.redirect('/');
 		// everytime a new battle is added, update the tags on
 		// our twitter stream
 		updateEmitter.emit('update_tags');

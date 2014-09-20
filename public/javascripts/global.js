@@ -31,32 +31,109 @@
   ];
 
   BattleTable = React.createClass({
+    getInitialState: function() {
+      return {
+        battles: []
+      };
+    },
+    componentDidMount: function() {
+      this.loadBattles();
+    },
+    loadBattles: function() {
+      $.ajax({
+        type: 'GET',
+        url: this.props.battleUrl,
+        dataType: 'json',
+        success: (function(battles) {
+          return this.setState({
+            battles: battles
+          });
+        }).bind(this),
+        error: (function(xhr, status, err) {
+          return console.error(this.props.notesUrl, status, err.toString());
+        }).bind(this)
+      });
+    },
+    formatBattleObj: function(battle_tags) {
+      var battle, curr_date, curr_month, curr_year, d;
+      d = new Date();
+      curr_date = d.getDate();
+      curr_month = d.getMonth() + 1;
+      curr_year = d.getFullYear();
+      return battle = {
+        tag1: battle_tags.tag1,
+        tag2: battle_tags.tag2,
+        tag1_count: 0,
+        tag2_count: 0,
+        created_at: curr_year + "-" + curr_month + "-" + curr_date
+      };
+    },
+    handleSubmit: function(battle_tags) {
+      var battle, battles;
+      battles = this.state.battles;
+      battle = this.formatBattleObj(battle_tags);
+      battles.unshift(battle);
+      this.setState({
+        battles: battles
+      });
+      this.postToServer(battle);
+    },
+    postToServer: function(battle) {
+      return $.ajax({
+        url: this.props.battleUrl + '/create',
+        dataType: 'json',
+        type: 'POST',
+        data: battle,
+        success: (function(data) {}).bind(this),
+        error: (function(xhr, status, err) {
+          console.error(this.props.battleUrl, status, err.toString());
+        }).bind(this)
+      });
+    },
     render: function() {
       return React.DOM.div({
         "id": 'wrapper'
-      }, BattleInput(null), BattleList({
-        "battles": this.props.battles
+      }, BattleInput({
+        "onSubmit": this.handleSubmit
+      }), BattleList({
+        "battles": this.state.battles
       }));
     }
   });
 
   BattleInput = React.createClass({
+    handleSubmit: function(e) {
+      var tag1, tag2;
+      e.preventDefault();
+      tag1 = this.refs.tag1.getDOMNode().value.trim();
+      tag2 = this.refs.tag2.getDOMNode().value.trim();
+      this.props.onSubmit({
+        tag1: tag1,
+        tag2: tag2
+      });
+      this.refs.tag1.getDOMNode().value = '';
+      return this.refs.tag2.getDOMNode().value = '';
+    },
     render: function() {
       return React.DOM.div({
         "className": 'form-container'
       }, React.DOM.form({
-        "action": "/battles/create",
-        "method": "post"
+        "onSubmit": this.handleSubmit
       }, React.DOM.input({
         "id": "hashtag1",
         "type": "text",
         "placeholder": "enter first hashtag",
-        "name": "tag1"
+        "name": "tag1",
+        "ref": "tag1"
       }), React.DOM.input({
         "id": "hashtag2",
         "type": "text",
         "placeholder": "enter second hashtag",
-        "name": "tag2"
+        "name": "tag2",
+        "ref": "tag2"
+      }), React.DOM.input({
+        "className": 'hidden-submit',
+        "type": 'submit'
       })));
     }
   });
@@ -101,8 +178,9 @@
 
   Battle = (Battle = React).createClass({
     render: function() {
-      var battle;
+      var battle, canvasId;
       battle = this.props.battle;
+      canvasId = 'canvas-#{battle.id}';
       return React.DOM.li({
         "className": "battle"
       }, React.DOM.div({
@@ -121,14 +199,17 @@
         "className": 'tag2-count'
       }, battle.tag2_count)), React.DOM.div({
         "className": 'date-created'
-      }, battle.created_at)));
+      }, battle.created_at), React.DOM.canvas({
+        "className": 'ratio',
+        "id": canvasId
+      })));
     }
   });
 
   $(document).ready(function() {
-    console.log(document.getElementById("#wrapper"));
     return React.renderComponent(BattleTable({
-      "battles": BATTLES
+      "battles": BATTLES,
+      "battleUrl": 'battles'
     }), document.body);
   });
 
